@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Raízes do Nordeste – Protótipo Front-End</title>
+<style>
+:root{--ink:#2B1A14;--verde:#C62828;--on:#fff;--milho:#FFB300;--areia:#FFF1E0;--bg:#FFFBF6;--bd:#F0CBA0;--erro:#B3261E;--ok:#1B6E38}
+@media(prefers-color-scheme:dark){:root{--ink:#FFEDE3;--verde:#FF8A65;--on:#2B0F0A;--areia:#3A211B;--bg:#1E1210;--bd:#5A3A30;--erro:#FF9A90;--ok:#86d9a0}}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.5 system-ui,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:72px}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(90deg,#C62828,#E65100);color:#fff;padding:10px 14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+header h1{font-size:1.05rem;margin:0;flex:1 1 140px}
+select,input,button{font:inherit}
+select,input[type=text],input[type=email],input[type=password],input[type=date]{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--ink)}
+header select{width:auto;max-width:48vw}
+main{max-width:760px;margin:0 auto;padding:14px}
+h2{font-size:1.2rem;margin:16px 0 6px;color:var(--verde)}.hero h2{color:#B71C1C}.hero p{font-weight:600}.item .row span{color:var(--verde);font-weight:700}
+button{min-height:44px;padding:8px 16px;border-radius:8px;border:2px solid var(--verde);background:var(--verde);color:var(--on);cursor:pointer;font-weight:600}
+button.sec{background:transparent;color:var(--verde)}
+button:disabled{opacity:.5;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--milho);outline-offset:2px}
+.card{border:1px solid var(--bd);border-radius:10px;padding:12px;margin:10px 0;background:var(--areia)}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.tag{font-size:.8rem;padding:2px 8px;border-radius:99px;background:var(--milho);color:#1d2a1f}
+.err{color:var(--erro);font-size:.9rem;margin:2px 0 8px}
+.ok{color:var(--ok)}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--bg);border-top:1px solid var(--bd);z-index:5}
+nav button{flex:1;border:0;border-radius:0;background:transparent;color:var(--ink);font-size:.8rem;min-height:56px;padding:4px}
+nav button[aria-current=page]{box-shadow:inset 0 3px var(--milho);color:var(--verde)}
+.steps{list-style:none;padding:0;display:grid;gap:8px}
+.steps li{padding:10px;border-left:6px solid var(--bd);background:var(--bg)}
+.steps li.on{border-color:var(--verde);font-weight:700}
+.banner{position:fixed;left:8px;right:8px;bottom:64px;background:var(--bg);border:2px solid var(--verde);border-radius:10px;padding:12px;z-index:9}
+label.c{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
+label.c input{width:22px;height:22px;margin-top:3px}
+table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--bd);padding:6px;text-align:left}
+.grid{display:grid;gap:10px}
+progress{width:100%}
+.spin{width:36px;height:36px;border:5px solid var(--bd);border-top-color:var(--verde);border-radius:50%;animation:s 1s linear infinite;margin:12px auto}
+@keyframes s{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.spin{animation:none}}
+@media(min-width:800px){body{padding-bottom:0}nav{position:static}.grid{grid-template-columns:1fr 1fr}.banner{bottom:12px;max-width:560px;left:auto}}
+.totem{font-size:22px}.totem button{min-height:72px}.totem .grid{grid-template-columns:1fr}.totem nav button{font-size:1rem;min-height:72px}
+.hero{position:relative;border-radius:12px;overflow:hidden;color:#B71C1C;text-shadow:0 2px 3px rgba(120,0,0,.28);min-height:130px;margin:10px 0;background:linear-gradient(135deg,#FFE0B2,#FFB74D)}
+.hero svg{position:absolute;inset:0;width:100%;height:100%}
+.hero div{position:relative;padding:18px 18px 40px;max-width:72%}.hero h2{margin:0 0 4px;font-size:1.35rem}.hero p{margin:0}
+.item{padding:0;overflow:hidden}.item .b{padding:12px}.ph{height:120px;background:var(--areia)}.ph svg{width:100%;height:100%;display:block}
+.th{display:inline-block;width:56px;height:31px;border-radius:6px;overflow:hidden;vertical-align:middle;margin-right:8px}.th svg{width:100%;height:100%;display:block}
+</style>
+</head>
+<body>
+<header id="hd"></header>
+<nav id="nv" aria-label="Navegação principal"></nav>
+<main id="mn"></main>
+<div id="bn"></div>
+<script>
+const U=[{id:'rec',n:'Recife – Boa Viagem',k:'Cozinha completa'},{id:'ssa',n:'Salvador – Pelourinho',k:'Formato reduzido de cozinha'},{id:'for',n:'Fortaleza – Aldeota',k:'Cozinha completa'}];
+const M=[
+{id:1,n:'Tapioca de queijo coalho',c:'Tapiocas',p:12.9,u:'rec ssa for'},
+{id:2,n:'Tapioca de carne de sol',c:'Tapiocas',p:16.9,u:'rec for'},
+{id:3,n:'Cuscuz recheado',c:'Cuscuz',p:15.9,u:'rec ssa for',out:'for'},
+{id:4,n:'Bolo de macaxeira',c:'Doces',p:9.5,u:'rec for'},
+{id:5,n:'Pamonha',c:'Doces',p:11,u:'rec ssa for',sz:1},
+{id:6,n:'Suco de cajá',c:'Bebidas',p:8,u:'rec ssa for'},
+{id:7,n:'Café da manhã completo',c:'Combos',p:24.9,u:'rec for'}];
+const SV=(bg,b)=>`<svg viewBox="0 0 200 110" aria-hidden="true" preserveAspectRatio="xMidYMid slice"><rect width="200" height="110" fill="${bg}"/>${b}</svg>`;
+const PL='<ellipse cx="100" cy="76" rx="82" ry="28" fill="#fff"/><ellipse cx="100" cy="74" rx="64" ry="20" fill="#EFE9DC"/>';
+const tapi=(bg,f)=>SV(bg,PL+`<path d="M42 72 A58 42 0 0 1 158 72 Z" fill="#F4E2B4" stroke="#C99A45" stroke-width="2"/><path d="M54 70 A46 28 0 0 1 146 70" fill="none" stroke="#E7C36C" stroke-width="5" opacity=".7"/><rect x="46" y="69" width="108" height="8" rx="4" fill="${f}"/><circle cx="72" cy="52" r="2.5" fill="#6BAA4F"/><circle cx="112" cy="46" r="2.5" fill="#6BAA4F"/><circle cx="132" cy="58" r="2.5" fill="#6BAA4F"/>`);
+const dots=[...Array(26)].map((_,k)=>`<circle cx="${66+(k*37%68)}" cy="${48+(k*53%20)}" r="1.8" fill="#D9BE6A"/>`).join('');
+const ART={
+ tap:tapi('#F6D9A8','#F2B632'),carne:tapi('#F3D2B8','#A8472E'),
+ cus:SV('#E6EFD2',PL+'<path d="M46 76 Q100 -4 154 76 Z" fill="#F3E3A0" stroke="#D4B866" stroke-width="2"/>'+dots+'<circle cx="84" cy="58" r="6" fill="#D6402B"/><circle cx="116" cy="62" r="6" fill="#D6402B"/><circle cx="100" cy="50" r="3" fill="#4F9A4A"/>'),
+ bolo:SV('#F9E1C6',PL+'<rect x="50" y="50" width="62" height="26" rx="6" fill="#E2A650"/><rect x="50" y="50" width="62" height="9" rx="5" fill="#F0C77A"/><rect x="92" y="44" width="62" height="26" rx="6" fill="#D9984A"/><rect x="92" y="44" width="62" height="9" rx="5" fill="#F0C77A"/><circle cx="64" cy="56" r="1.8" fill="#fff"/><circle cx="88" cy="55" r="1.8" fill="#fff"/><circle cx="110" cy="50" r="1.8" fill="#fff"/><circle cx="136" cy="49" r="1.8" fill="#fff"/>'),
+ pam:SV('#E3EBC8','<path d="M28 62 L62 38 L140 38 L174 62 L140 86 L62 86 Z" fill="#8FB86A" stroke="#5E8C45" stroke-width="2"/><rect x="62" y="42" width="78" height="40" rx="12" fill="#F2C94C"/><path d="M72 46 V78 M86 44 V80 M100 44 V80 M114 44 V80 M128 46 V78" stroke="#D9AE2E" stroke-width="2"/><path d="M28 62 H174" stroke="#5E8C45" stroke-width="2"/>'),
+ suco:SV('#FCEFC4','<path d="M72 26 L128 26 L120 94 L80 94 Z" fill="#F6B73C" stroke="#D9921C" stroke-width="2"/><ellipse cx="100" cy="26" rx="28" ry="5" fill="#FAD47A" stroke="#D9921C" stroke-width="2"/><path d="M110 8 L102 70" stroke="#D6402B" stroke-width="4" stroke-linecap="round"/><circle cx="154" cy="80" r="11" fill="#F2C94C" stroke="#D9AE2E" stroke-width="2"/><circle cx="40" cy="84" r="9" fill="#F2C94C" stroke="#D9AE2E" stroke-width="2"/><path d="M154 69 q8 -8 14 -4 q-6 8 -14 4z" fill="#4F9A4A"/>'),
+ cafe:SV('#F2DEC8','<ellipse cx="68" cy="88" rx="44" ry="10" fill="#fff"/><path d="M42 50 H94 V68 Q94 86 68 86 Q42 86 42 68 Z" fill="#fff" stroke="#CFC4B0" stroke-width="2"/><ellipse cx="68" cy="50" rx="26" ry="5" fill="#6B3F22"/><path d="M94 56 q16 0 12 12 q-3 8 -12 6" fill="none" stroke="#CFC4B0" stroke-width="4"/><path d="M58 38 q-6 -8 0 -14 M72 38 q-6 -8 0 -14" fill="none" stroke="#B9A98F" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="148" cy="88" rx="44" ry="10" fill="#fff"/><path d="M122 88 Q148 42 174 88 Z" fill="#F3E3A0" stroke="#D4B866" stroke-width="2"/><circle cx="140" cy="76" r="5" fill="#D6402B"/>')};
+/* ===== SUAS FOTOS =====
+   Para usar uma foto sua, coloque o arquivo na pasta img/ e escreva o caminho entre as aspas.
+   Exemplo: 1:'img/tapioca-coalho.jpg'. Deixe '' para continuar com a ilustração. */
+const FOTOS={1:'tapioca-coalho.png',2:'tapioca-carne-de-sol.png',3:'cuscuz-recheado.png',4:'bolo-de-macaxeira.png',5:'pamonha.png',6:'suco-de-caja.png',7:'cafe-da-manha-completo.png'};
+const FOTO_BANNER='banner.png';   // opcional, exemplo: 'img/banner.jpg'
+const AK={1:'tap',2:'carne',3:'cus',4:'bolo',5:'pam',6:'suco',7:'cafe'};
+const art=i=>FOTOS[i.id]?`<img src="${FOTOS[i.id]}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.outerHTML=ART[AK[${i.id}]]">`:ART[AK[i.id]];
+const HERO='<section class="hero"'+(FOTO_BANNER?` style="background:url(${FOTO_BANNER}) center/cover,linear-gradient(135deg,#FFE0B2,#FFB74D)"`:'')+'>'+(FOTO_BANNER?'':'<svg viewBox="0 0 400 130" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><circle cx="330" cy="46" r="40" fill="#FF7043"/><path d="M0 130 L0 116 Q80 100 160 114 T400 108 L400 130 Z" fill="#2F5D3A"/><path d="M0 130 L0 124 Q120 114 230 124 T400 121 L400 130 Z" fill="#244A2E"/></svg>')+'<div><h2>Do Nordeste para o seu dia</h2><p>Tapioca, cuscuz e café passado na hora.</p></div></section>';
+const ST=['Recebido','Em preparo','Pronto para retirada','Retirado'];
+const S={v:'menu',unit:'rec',ch:'app',cart:{},acc:{n:'Cliente Demo',e:'demo@raizes.com',s:'raizes123'},user:null,pts:120,ord:[],sim:'ok',msg:'',cons:null,tab:'in',use:false,ban:true};
+let T=Date.now();
+const $=s=>document.querySelector(s),R=n=>'R$ '+n.toFixed(2).replace('.',','),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const unit=()=>U.find(x=>x.id===S.unit);
+const why=i=>i.out===S.unit?'Esgotado hoje nesta unidade':i.sz?'Disponível só na temporada de junho':'';
+const qty=()=>Object.values(S.cart).reduce((a,b)=>a+b,0);
+const sub=()=>Object.entries(S.cart).reduce((a,[id,q])=>a+M.find(m=>m.id==id).p*q,0);
+const tier=()=>S.pts>=500?['Raiz forte',10]:S.pts>=200?['Broto',5]:['Semente',0];
+const flash=()=>{const m=S.msg;S.msg='';return m?`<p role="alert" class="card ${/aprovado|criada|registrado|revogado|Pedido de/.test(m)&&!/recusado/.test(m)?'ok':'err'}">${esc(m)}</p>`:''};
+function go(v){S.v=v;render()}
+function add(id){S.cart[id]=(S.cart[id]||0)+1;render()}
+function dec(id){if(--S.cart[id]<=0)delete S.cart[id];render()}
+function adv(id){S.ord.find(o=>o.id===id).st++;render()}
+function cons(k,v){S.cons[k]=v;S.cons.at=new Date().toLocaleString('pt-BR');S.msg=v?'Consentimento registrado.':'Consentimento revogado. A mudança já vale.';render()}
+function del(){if(confirm('Excluir sua conta e seus dados?')){S.user=null;S.acc=null;S.pts=0;S.cons=null;S.msg='Conta excluída.';go('menu')}}
+function pay(tot){
+ if(!S.user&&S.ch!=='totem'){S.msg='Entre na sua conta para pagar.';return go('acc')}
+ const rd=S.use&&S.user&&S.pts>=100;S.v='wait';render();
+ setTimeout(()=>{
+  if(S.sim==='ok'){
+   S.ord.unshift({id:'RN-'+(1001+S.ord.length),u:unit().n,tot,st:0,n:qty()});
+   if(S.user){if(rd)S.pts-=100;S.pts+=Math.floor(tot)}
+   S.use=false;S.cart={};S.msg='Pagamento aprovado. Seu pedido foi enviado à cozinha.';go('ord');
+  }else{
+   S.msg=S.sim==='neg'?'Pagamento recusado pelo emissor. Nada foi cobrado. Confira os dados ou escolha outra forma de pagamento.':'O serviço de pagamento não respondeu. Seu carrinho foi mantido e nada foi cobrado. Tente de novo em instantes.';
+   go('cart');
+  }},1500);
+}
+function fe(id,m){$('#'+id).textContent=m}
+function login(ev){ev.preventDefault();['ee','se'].forEach(i=>fe(i,''));
+ const e=$('#e').value.trim(),s=$('#s').value;let bad=0;
+ if(!/^\S+@\S+\.\S+$/.test(e)){fe('ee','Informe um e-mail válido, como nome@email.com.');bad=1}
+ if(!s){fe('se','Informe sua senha.');bad=1}
+ if(bad)return false;
+ if(!S.acc||S.acc.e!==e||S.acc.s!==s){fe('se','E-mail ou senha incorretos. Confira e tente de novo.');$('#s').value='';$('#s').focus();return false}
+ S.user={n:S.acc.n,e};S.cons=S.cons||{mkt:false,perf:false};S.msg='Bem-vindo, '+S.acc.n+'.';go('menu');return false}
+function signup(ev){ev.preventDefault();['ne','ee','se','te'].forEach(i=>fe(i,''));
+ const n=$('#n').value.trim(),e=$('#e').value.trim(),s=$('#s').value,f=[];
+ if(n.length<2)f.push(['n','ne','Informe seu nome.']);
+ if(!/^\S+@\S+\.\S+$/.test(e))f.push(['e','ee','Informe um e-mail válido, como nome@email.com.']);
+ if(s.length<8)f.push(['s','se','A senha precisa ter pelo menos 8 caracteres.']);
+ if(!$('#tm').checked)f.push(['tm','te','Para criar a conta, aceite os termos e a política de privacidade.']);
+ if(f.length){f.forEach(x=>fe(x[1],x[2]));$('#'+f[0][0]).focus();return false}
+ S.acc={n,e,s};S.user={n,e};S.cons={mkt:$('#mk').checked,perf:$('#pf').checked,at:new Date().toLocaleString('pt-BR')};
+ S.msg='Conta criada. Seus consentimentos foram registrados.';go('menu');return false}
+function vMenu(){
+ let h=`<span class="tag">${esc(unit().k)}</span>`+flash();
+ h+=HERO;h+=`<section class="card"><h2>Promoções</h2><p>Quinta da tapioca: 10% em todas as tapiocas.</p>${S.cons&&S.cons.mkt?'<p><b>Para você:</b> suco de cajá em dobro nos cafés da manhã de sexta.</p>':'<p>Quer ofertas feitas para você? Ative em Privacidade. É opcional.</p>'}</section>`;
+ [...new Set(M.map(i=>i.c))].forEach(c=>{
+  const L=M.filter(i=>i.c===c&&i.u.includes(S.unit));if(!L.length)return;
+  h+=`<h2>${c}</h2><div class="grid">`+L.map(i=>{const w=why(i);return `<article class="card item"><div class="ph" style="${w?'filter:grayscale(.8);opacity:.7':''}">${art(i)}</div><div class="b"><div class="row"><strong>${i.n}</strong><span>${R(i.p)}</span></div>${w?`<p class="err">${w}</p>`:''}<button ${w?'disabled':''} onclick="add(${i.id})" aria-label="Adicionar ${i.n}">Adicionar</button></div></article>`}).join('')+'</div>'});
+ return h}
+function vCart(){
+ const ids=Object.keys(S.cart);
+ if(!ids.length)return flash()+'<div class="card"><h2>Seu carrinho está vazio</h2><p>Escolha itens do cardápio desta unidade.</p><button onclick="go(\'menu\')">Ver cardápio</button></div>';
+ const s=sub(),t=tier(),pd=S.user?s*t[1]/100:0,rd=S.use&&S.user&&S.pts>=100?5:0,tot=Math.max(0,s-pd-rd);
+ return flash()+`<h2>Carrinho: ${unit().n}</h2>`+ids.map(id=>{const i=M.find(m=>m.id==id);return `<div class="card row"><span><span class="th">${art(i)}</span>${i.n} × ${S.cart[id]}</span><span><button class="sec" aria-label="Remover um ${i.n}" onclick="dec(${id})">−</button> <button class="sec" aria-label="Adicionar mais um ${i.n}" onclick="add(${id})">+</button></span></div>`}).join('')+
+ `<div class="card"><label>Como você vai receber?<select><option>Retirada rápida (pick-up)</option><option>Comer no local</option><option>Retirar no balcão</option></select></label>
+ <table><tr><td>Subtotal</td><td>${R(s)}</td></tr>${pd?`<tr><td>Desconto nível ${t[0]} (${t[1]}%)</td><td>− ${R(pd)}</td></tr>`:''}${rd?`<tr><td>Resgate de 100 pontos</td><td>− ${R(rd)}</td></tr>`:''}<tr><th>Total</th><th>${R(tot)}</th></tr></table>
+ ${S.user?`<label class="c"><input type="checkbox" ${S.use?'checked':''} ${S.pts<100?'disabled':''} onchange="S.use=this.checked;render()"><span>Usar 100 pontos (−R$ 5,00). ${S.pts<100?`Faltam ${100-S.pts} pontos.`:`Saldo: ${S.pts} pontos.`}</span></label>`:S.ch==='totem'?'<p>Você está como convidado: não coletamos dados pessoais e não há pontos.</p>':'<p>Entre para acumular pontos e usar descontos.</p><button class="sec" onclick="go(\'acc\')">Entrar ou criar conta</button>'}
+ <label>Simular resposta do pagamento externo (só para demonstração)<select onchange="S.sim=this.value"><option value="ok" ${S.sim==='ok'?'selected':''}>Aprovado</option><option value="neg" ${S.sim==='neg'?'selected':''}>Recusado</option><option value="off" ${S.sim==='off'?'selected':''}>Serviço indisponível</option></select></label>
+ <p><small>O pagamento é feito por um serviço externo. Esta tela não recebe nem guarda dados do cartão.</small></p>
+ <button onclick="pay(${tot})">Pagar ${R(tot)}</button></div>`}
+function vWait(){return '<div class="card" role="status" aria-live="polite"><div class="spin"></div><p>Aguardando a confirmação do pagamento. Não feche esta tela.</p><button disabled>Pagar</button></div>'}
+function vOrd(){
+ if(!S.ord.length)return flash()+'<div class="card"><h2>Nenhum pedido ainda</h2><button onclick="go(\'menu\')">Fazer um pedido</button></div>';
+ return flash()+S.ord.map(o=>`<section class="card"><h2>Pedido ${o.id}</h2><p>${o.u}, ${o.n} item(ns), ${R(o.tot)}</p><ol class="steps" aria-live="polite">${ST.map((s,i)=>`<li class="${i===o.st?'on':''}" ${i===o.st?'aria-current="step"':''}>${i<=o.st?'✔ ':''}${s}</li>`).join('')}</ol>${o.st<3?`<button class="sec" onclick="adv('${o.id}')">Simular cozinha: avançar status</button>`:'<p class="ok">Pedido concluído.</p>'}</section>`).join('')}
+function vPts(){
+ if(!S.user)return flash()+'<div class="card"><h2>Programa de fidelidade</h2><p>Cada R$ 1 vira 1 ponto. 100 pontos valem R$ 5,00 de desconto. Entre para participar.</p><button onclick="go(\'acc\')">Entrar ou criar conta</button></div>';
+ const t=tier(),nx=S.pts>=500?0:S.pts>=200?500:200;
+ return flash()+`<h2>Seus pontos</h2><div class="card"><p style="font-size:2rem;margin:0"><strong>${S.pts}</strong> pontos</p><p>Nível <span class="tag">${t[0]}</span>: ${t[1]}% de desconto em todo pedido.</p>${nx?`<progress max="${nx}" value="${S.pts}" aria-label="Progresso para o próximo nível"></progress><p>Faltam ${nx-S.pts} pontos para o próximo nível.</p>`:'<p>Você está no nível máximo.</p>'}</div><div class="card"><table><tr><th>Nível</th><th>Pontos</th><th>Desconto</th></tr><tr><td>Semente</td><td>0</td><td>0%</td></tr><tr><td>Broto</td><td>200</td><td>5%</td></tr><tr><td>Raiz forte</td><td>500</td><td>10%</td></tr></table></div>${S.cons&&S.cons.perf?'<p class="card">Campanha para o seu perfil: pontos em dobro nos cafés da manhã.</p>':''}`}
+function vAcc(){
+ if(S.user)return flash()+`<h2>Olá, ${esc(S.user.n)}</h2><p>${esc(S.user.e)}</p><div class="row"><button onclick="go('priv')">Privacidade e meus dados</button><button class="sec" onclick="S.user=null;S.use=false;go('menu')">Sair</button></div>${S.ch==='web'?'<p><button class="sec" onclick="go(\'adm\')">Painel da gerência (demonstração)</button></p>':''}`;
+ const tb=`<div class="row"><button class="${S.tab==='in'?'':'sec'}" onclick="S.tab='in';render()">Entrar</button><button class="${S.tab==='up'?'':'sec'}" onclick="S.tab='up';render()">Criar conta</button></div>`;
+ if(S.tab==='in')return flash()+tb+`<form onsubmit="return login(event)" novalidate><h2>Entrar</h2><label>E-mail<input id="e" type="email" autocomplete="email"></label><p class="err" id="ee" role="alert"></p><label>Senha<input id="s" type="password" autocomplete="current-password"></label><p class="err" id="se" role="alert"></p><button>Entrar</button><p><small>Conta de teste: demo@raizes.com / raizes123</small></p></form>${S.ch==='totem'?'<button class="sec" onclick="go(\'menu\')">Continuar como convidado</button>':''}`;
+ return flash()+tb+`<form onsubmit="return signup(event)" novalidate><h2>Criar conta</h2><label>Nome<input id="n" type="text" autocomplete="name"></label><p class="err" id="ne" role="alert"></p><label>E-mail<input id="e" type="email" autocomplete="email"></label><p class="err" id="ee" role="alert"></p><label>Senha (mínimo de 8 caracteres)<input id="s" type="password" autocomplete="new-password"></label><p class="err" id="se" role="alert"></p>
+ <div class="card"><h3>Seus dados, suas escolhas</h3><p><small>Usamos nome e e-mail para a conta e os pedidos. O restante é opcional e você muda quando quiser em Privacidade.</small></p>
+ <label class="c"><input id="tm" type="checkbox"><span>Li e aceito os termos e a política de privacidade (necessário)</span></label><p class="err" id="te" role="alert"></p>
+ <label class="c"><input id="mk" type="checkbox"><span>Quero receber promoções e campanhas</span></label>
+ <label class="c"><input id="pf" type="checkbox"><span>Pode usar minha idade e frequência de consumo para campanhas sob medida</span></label></div><button>Criar conta</button></form>`}
+function vPriv(){
+ const c=S.cons||{};
+ return flash()+`<h2>Privacidade e meus dados</h2><div class="card"><p>Usamos seus dados para processar pedidos e pontos. Campanhas e segmentação só acontecem com o seu consentimento. Não guardamos dados de cartão.</p></div>`+(S.user?`<div class="card"><h3>Meus consentimentos</h3><label class="c"><input type="checkbox" checked disabled><span>Termos e política de privacidade (necessário para ter conta)</span></label><label class="c"><input type="checkbox" ${c.mkt?'checked':''} onchange="cons('mkt',this.checked)"><span>Receber promoções e campanhas</span></label><label class="c"><input type="checkbox" ${c.perf?'checked':''} onchange="cons('perf',this.checked)"><span>Usar minha idade e frequência de consumo em campanhas sob medida</span></label><p><small>Última alteração: ${c.at||'nenhuma até agora'}.</small></p></div><div class="card"><h3>Seus direitos (LGPD, art. 18)</h3><div class="row"><button class="sec" onclick="S.msg='Pedido de exportação registrado. Você receberá o arquivo por e-mail.';render()">Baixar meus dados</button><button class="sec" onclick="del()">Excluir minha conta</button></div></div><div class="card"><h3>Quem acessou meus dados</h3><table><tr><td>Hoje</td><td>Sistema de pedidos (processar pedido)</td></tr><tr><td>Esta semana</td><td>Programa de fidelidade (pontos)</td></tr></table></div>`:'<div class="card"><p>Entre na sua conta para gerenciar consentimentos.</p><button onclick="go(\'acc\')">Entrar</button></div>')}
+function vAdm(){
+ return `<h2>Painel da gerência (dados fictícios)</h2><div class="card"><table><tr><th>Unidade</th><th>Vendas (mês)</th><th>Mais vendido</th></tr><tr><td>Recife</td><td>R$ 48.200</td><td>Tapioca de queijo coalho</td></tr><tr><td>Salvador</td><td>R$ 31.750</td><td>Cuscuz recheado</td></tr><tr><td>Fortaleza</td><td>R$ 39.480</td><td>Café da manhã completo</td></tr></table></div><div class="card"><h3>Auditoria de operações sensíveis</h3><table><tr><td>Cancelamento RN-0987</td><td>gerente.rec, hoje</td></tr><tr><td>Desconto manual 15%</td><td>atendente.ssa, ontem</td></tr><tr><td>Ajuste de estoque: cuscuz</td><td>gerente.for, ontem</td></tr></table></div><p><small>Exibido só para o perfil Gerente/Administrador, com login e registro de acesso.</small></p>`}
+function render(){
+ document.body.className=S.ch==='totem'?'totem':'';
+ $('#hd').innerHTML=`<h1>Raízes do Nordeste</h1><select aria-label="Unidade" onchange="if(qty())S.msg='Carrinho esvaziado: o cardápio muda de unidade para unidade.';S.cart={};S.unit=this.value;render()">${U.map(u=>`<option value="${u.id}" ${u.id===S.unit?'selected':''}>${u.n}</option>`).join('')}</select><select aria-label="Canal de atendimento" onchange="S.ch=this.value;if(S.ch==='totem')S.user=null;render()">${[['app','App'],['totem','Totem'],['web','Web']].map(([k,t])=>`<option value="${k}" ${S.ch===k?'selected':''}>${t}</option>`).join('')}</select>`;
+ const N=[['menu','Cardápio'],['cart','Carrinho '+qty()],['ord','Pedidos'],['pts','Pontos'],['acc',S.user?'Conta':'Entrar']];
+ const cur=k=>S.v===k||(S.v==='wait'&&k==='cart')||((S.v==='priv'||S.v==='adm')&&k==='acc');
+ $('#nv').innerHTML=N.map(([k,t])=>`<button ${cur(k)?'aria-current="page"':''} onclick="go('${k}')">${t}</button>`).join('');
+ $('#mn').innerHTML=({menu:vMenu,cart:vCart,wait:vWait,ord:vOrd,pts:vPts,acc:vAcc,priv:vPriv,adm:vAdm})[S.v]();
+ $('#bn').innerHTML=S.ban?`<div class="banner" role="dialog" aria-label="Aviso de privacidade"><p>Usamos só os dados essenciais para o app funcionar. Análises e campanhas dependem da sua permissão. <a href="#" onclick="S.ban=0;go('priv');return false">Ver privacidade</a></p><button onclick="S.ban=0;render()">Entendi</button></div>`:'';
+}
+document.addEventListener('click',()=>T=Date.now());
+setInterval(()=>{if(S.ch==='totem'&&S.v!=='menu'&&Date.now()-T>60000){S.cart={};S.user=null;S.v='menu';render()}},5000);
+render();
+</script>
+</body>
+</html>
