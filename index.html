@@ -47,6 +47,44 @@ progress{width:100%}
 .hero div{position:relative;padding:18px 18px 40px;max-width:72%}.hero h2{margin:0 0 4px;font-size:1.35rem}.hero p{margin:0}
 .item{padding:0;overflow:hidden}.item .b{padding:12px}.ph{height:120px;background:var(--areia)}.ph svg{width:100%;height:100%;display:block}
 .th{display:inline-block;width:56px;height:31px;border-radius:6px;overflow:hidden;vertical-align:middle;margin-right:8px}.th svg{width:100%;height:100%;display:block}
+
+.chip{font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.5)}
+body.ch-app{background:var(--areia);padding-bottom:72px}
+.ch-app main{background:var(--bg);max-width:480px;min-height:100vh;box-shadow:0 0 0 1px var(--bd),0 12px 32px rgba(0,0,0,.14)}
+.ch-app header{max-width:480px;margin:0 auto}
+.ch-app .grid{grid-template-columns:1fr}
+@media(min-width:800px){.ch-app nav{position:fixed;left:50%;right:auto;width:480px;transform:translateX(-50%)}.ch-app .banner{left:50%;right:auto;width:464px;transform:translateX(-50%)}}
+.ch-web header{background:var(--bg);color:var(--verde);padding:16px 28px;border-bottom:3px solid var(--milho)}
+.ch-web header h1{font-size:1.6rem}
+.ch-web .chip{background:var(--verde);color:var(--on);border-color:var(--verde)}
+.ch-web nav{justify-content:center;background:linear-gradient(90deg,#C62828,#E65100);border:0}
+.ch-web nav button{color:#fff;font-size:1rem;max-width:200px}
+.ch-web nav button[aria-current=page]{color:#FFD54F;box-shadow:inset 0 -4px #FFD54F}
+.ch-web main{max-width:1180px;padding:20px 28px}
+.ch-web .grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.ch-web .hero{min-height:200px}.ch-web .hero h2{font-size:2.1rem}.ch-web .ph{height:150px}
+.wlay{display:grid;gap:20px;grid-template-columns:1fr}
+@media(min-width:900px){.wlay{grid-template-columns:1fr 320px}.side{position:sticky;top:90px;align-self:start}}
+body.ch-totem{background:#7F1710;color:#fff;padding-bottom:130px;font-size:24px}
+.ch-totem nav,.ch-totem .hero{display:none}
+.ch-totem header{background:#5C0F0A;padding:18px 24px;justify-content:center;text-align:center}
+.ch-totem header h1{font-size:2rem;color:#FFD54F;flex:1 1 100%}
+.ch-totem header select{font-size:.8rem;min-height:36px}
+.ch-totem .chip{background:#FFB300;color:#2B1A14;border:0;font-size:.9rem}
+.ch-totem main{max-width:1000px}
+.ch-totem main>h2{color:#FFD54F;font-size:1.8rem}
+.ch-totem .card{color:var(--ink)}
+.ch-totem .grid{grid-template-columns:1fr}
+@media(min-width:700px){.ch-totem .grid{grid-template-columns:1fr 1fr}}
+.ch-totem .ph{height:190px}
+.ch-totem button{min-height:76px;font-size:1.25rem;border-radius:14px}
+.ch-totem .bk{background:#fff;color:#7F1710;border-color:#fff}
+.tbar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:14px;padding:14px;background:#5C0F0A;z-index:6}
+.tbar button{flex:1}
+.tbar button:not(.sec){background:#FFB300;color:#2B1A14;border-color:#FFB300;flex:2}
+.tbar button.sec{color:#fff;border-color:#fff}
+.welc{text-align:center;padding:36px 8px;color:#fff}.welc h2{color:#FFD54F;font-size:2.4rem;margin:0 0 8px}.welc p{font-size:1.5rem;margin:0 0 24px}
+.wb{display:grid;gap:18px;margin:24px 0}.wb button{min-height:130px;font-size:1.8rem;background:#FFB300;color:#2B1A14;border-color:#FFB300}
 </style>
 </head>
 <body>
@@ -81,7 +119,7 @@ const AK={1:'tap',2:'carne',3:'cus',4:'bolo',5:'pam',6:'suco',7:'cafe'};
 const art=i=>FOTOS[i.id]?`<img src="${FOTOS[i.id]}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.outerHTML=ART[AK[${i.id}]]">`:ART[AK[i.id]];
 const HERO='<section class="hero"'+(FOTO_BANNER?` style="background:url(${FOTO_BANNER}) center/cover,linear-gradient(135deg,#FFE0B2,#FFB74D)"`:'')+'>'+(FOTO_BANNER?'':'<svg viewBox="0 0 400 130" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><circle cx="330" cy="46" r="40" fill="#FF7043"/><path d="M0 130 L0 116 Q80 100 160 114 T400 108 L400 130 Z" fill="#2F5D3A"/><path d="M0 130 L0 124 Q120 114 230 124 T400 121 L400 130 Z" fill="#244A2E"/></svg>')+'<div><h2>Do Nordeste para o seu dia</h2><p>Tapioca, cuscuz e café passado na hora.</p></div></section>';
 const ST=['Recebido','Em preparo','Pronto para retirada','Retirado'];
-const S={v:'menu',unit:'rec',ch:'app',cart:{},acc:{n:'Cliente Demo',e:'demo@raizes.com',s:'raizes123'},user:null,pts:120,ord:[],sim:'ok',msg:'',cons:null,tab:'in',use:false,ban:true};
+const S={v:'menu',unit:'rec',ch:'app',cart:{},acc:{n:'Cliente Demo',e:'demo@raizes.com',s:'raizes123'},user:null,pts:120,ord:[],sim:'ok',msg:'',cons:null,tab:'in',use:false,ban:true,start:false};
 let T=Date.now();
 const $=s=>document.querySelector(s),R=n=>'R$ '+n.toFixed(2).replace('.',','),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const unit=()=>U.find(x=>x.id===S.unit);
@@ -166,17 +204,25 @@ function vPriv(){
  return flash()+`<h2>Privacidade e meus dados</h2><div class="card"><p>Usamos seus dados para processar pedidos e pontos. Campanhas e segmentação só acontecem com o seu consentimento. Não guardamos dados de cartão.</p></div>`+(S.user?`<div class="card"><h3>Meus consentimentos</h3><label class="c"><input type="checkbox" checked disabled><span>Termos e política de privacidade (necessário para ter conta)</span></label><label class="c"><input type="checkbox" ${c.mkt?'checked':''} onchange="cons('mkt',this.checked)"><span>Receber promoções e campanhas</span></label><label class="c"><input type="checkbox" ${c.perf?'checked':''} onchange="cons('perf',this.checked)"><span>Usar minha idade e frequência de consumo em campanhas sob medida</span></label><p><small>Última alteração: ${c.at||'nenhuma até agora'}.</small></p></div><div class="card"><h3>Seus direitos (LGPD, art. 18)</h3><div class="row"><button class="sec" onclick="S.msg='Pedido de exportação registrado. Você receberá o arquivo por e-mail.';render()">Baixar meus dados</button><button class="sec" onclick="del()">Excluir minha conta</button></div></div><div class="card"><h3>Quem acessou meus dados</h3><table><tr><td>Hoje</td><td>Sistema de pedidos (processar pedido)</td></tr><tr><td>Esta semana</td><td>Programa de fidelidade (pontos)</td></tr></table></div>`:'<div class="card"><p>Entre na sua conta para gerenciar consentimentos.</p><button onclick="go(\'acc\')">Entrar</button></div>')}
 function vAdm(){
  return `<h2>Painel da gerência (dados fictícios)</h2><div class="card"><table><tr><th>Unidade</th><th>Vendas (mês)</th><th>Mais vendido</th></tr><tr><td>Recife</td><td>R$ 48.200</td><td>Tapioca de queijo coalho</td></tr><tr><td>Salvador</td><td>R$ 31.750</td><td>Cuscuz recheado</td></tr><tr><td>Fortaleza</td><td>R$ 39.480</td><td>Café da manhã completo</td></tr></table></div><div class="card"><h3>Auditoria de operações sensíveis</h3><table><tr><td>Cancelamento RN-0987</td><td>gerente.rec, hoje</td></tr><tr><td>Desconto manual 15%</td><td>atendente.ssa, ontem</td></tr><tr><td>Ajuste de estoque: cuscuz</td><td>gerente.for, ontem</td></tr></table></div><p><small>Exibido só para o perfil Gerente/Administrador, com login e registro de acesso.</small></p>`}
+const CH={app:'App',totem:'Totem',web:'Web'};
+const side=()=>{const ids=Object.keys(S.cart);return '<h2>Seu pedido</h2>'+(ids.length?ids.map(id=>{const i=M.find(m=>m.id==id);return `<div class="row"><span>${i.n} × ${S.cart[id]}</span><span>${R(i.p*S.cart[id])}</span></div>`}).join('')+`<p><strong>Subtotal: ${R(sub())}</strong></p><button onclick="go('cart')">Ir para o pagamento</button>`:'<p>Nenhum item ainda. Escolha no cardápio.</p>')};
+const tbar=()=>`<div class="tbar"><button class="sec" onclick="S.cart={};S.start=false;render()">Cancelar</button><button onclick="go('cart')" ${qty()?'':'disabled'}>Ver pedido (${qty()}) ${qty()?R(sub()):''}</button></div>`;
+const vWelcome=()=>`<section class="welc"><h2>Bem-vindo à Raízes do Nordeste</h2><p>Toque para começar o seu pedido</p><div class="wb"><button onclick="S.start=true;go('menu')">Comer aqui</button><button onclick="S.start=true;go('menu')">Retirar no balcão</button></div><small>Sem cadastro. Não coletamos seus dados pessoais.</small></section>`;
 function render(){
- document.body.className=S.ch==='totem'?'totem':'';
- $('#hd').innerHTML=`<h1>Raízes do Nordeste</h1><select aria-label="Unidade" onchange="if(qty())S.msg='Carrinho esvaziado: o cardápio muda de unidade para unidade.';S.cart={};S.unit=this.value;render()">${U.map(u=>`<option value="${u.id}" ${u.id===S.unit?'selected':''}>${u.n}</option>`).join('')}</select><select aria-label="Canal de atendimento" onchange="S.ch=this.value;if(S.ch==='totem')S.user=null;render()">${[['app','App'],['totem','Totem'],['web','Web']].map(([k,t])=>`<option value="${k}" ${S.ch===k?'selected':''}>${t}</option>`).join('')}</select>`;
+ const ch=S.ch,tot=ch==='totem';
+ document.body.className='ch-'+ch+(tot?' totem':'');
+ $('#hd').innerHTML=`<h1>Raízes do Nordeste</h1><span class="chip">Canal: ${CH[ch]}</span><select aria-label="Unidade" onchange="if(qty())S.msg='Carrinho esvaziado: o cardápio muda de unidade para unidade.';S.cart={};S.unit=this.value;render()">${U.map(u=>`<option value="${u.id}" ${u.id===S.unit?'selected':''}>${u.n}</option>`).join('')}</select><select aria-label="Canal de atendimento" onchange="S.ch=this.value;S.start=false;S.v='menu';if(S.ch==='totem')S.user=null;render()">${Object.entries(CH).map(([k,t])=>`<option value="${k}" ${ch===k?'selected':''}>${t}</option>`).join('')}</select>`;
  const N=[['menu','Cardápio'],['cart','Carrinho '+qty()],['ord','Pedidos'],['pts','Pontos'],['acc',S.user?'Conta':'Entrar']];
  const cur=k=>S.v===k||(S.v==='wait'&&k==='cart')||((S.v==='priv'||S.v==='adm')&&k==='acc');
  $('#nv').innerHTML=N.map(([k,t])=>`<button ${cur(k)?'aria-current="page"':''} onclick="go('${k}')">${t}</button>`).join('');
- $('#mn').innerHTML=({menu:vMenu,cart:vCart,wait:vWait,ord:vOrd,pts:vPts,acc:vAcc,priv:vPriv,adm:vAdm})[S.v]();
+ let c=tot&&!S.start?vWelcome():({menu:vMenu,cart:vCart,wait:vWait,ord:vOrd,pts:vPts,acc:vAcc,priv:vPriv,adm:vAdm})[S.v]();
+ if(tot&&S.start&&S.v!=='menu')c=`<p><button class="bk" onclick="go('menu')">Voltar ao cardápio</button></p>`+c;
+ if(ch==='web'&&S.v==='menu')c=`<div class="wlay"><div>${c}</div><aside class="card side">${side()}</aside></div>`;
+ $('#mn').innerHTML=c+(tot&&S.start&&S.v==='menu'?tbar():'');
  $('#bn').innerHTML=S.ban?`<div class="banner" role="dialog" aria-label="Aviso de privacidade"><p>Usamos só os dados essenciais para o app funcionar. Análises e campanhas dependem da sua permissão. <a href="#" onclick="S.ban=0;go('priv');return false">Ver privacidade</a></p><button onclick="S.ban=0;render()">Entendi</button></div>`:'';
 }
 document.addEventListener('click',()=>T=Date.now());
-setInterval(()=>{if(S.ch==='totem'&&S.v!=='menu'&&Date.now()-T>60000){S.cart={};S.user=null;S.v='menu';render()}},5000);
+setInterval(()=>{if(S.ch==='totem'&&S.v!=='menu'&&Date.now()-T>60000){S.cart={};S.user=null;S.start=false;S.v='menu';render()}},5000);
 render();
 </script>
 </body>
