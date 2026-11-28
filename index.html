@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" href="favicon.png">
 <title>Raízes do Nordeste – Protótipo Front-End</title>
 <style>
 :root{--ink:#2B1A14;--verde:#C62828;--on:#fff;--milho:#FFB300;--areia:#FFF1E0;--bg:#FFFBF6;--bd:#F0CBA0;--erro:#B3261E;--ok:#1B6E38}
@@ -89,6 +90,8 @@ body.ch-totem{background:#7F1710;color:#fff;padding-bottom:130px;font-size:24px}
 .ch-totem .banner p{margin:0 0 10px!important;font-size:15px!important;color:#2B1A14!important}
 .ch-totem .banner a{color:#C62828!important;font-size:15px!important}
 .ch-totem .banner button{min-height:46px!important;font-size:16px!important;padding:6px 20px;background:#C62828!important;color:#fff!important;border-color:#C62828!important}
+.lg{height:42px;width:42px;object-fit:contain;background:#EFDCC0;border-radius:50%;padding:4px;vertical-align:middle;margin-right:8px}.lgcard{display:inline-block;background:#EFDCC0;border-radius:24px;padding:14px 26px;margin:0 0 20px}.lgcard img{width:min(300px,70vw);display:block}
+.bi{float:left;height:36px;width:36px;margin:0 10px 4px 0;background:#EFDCC0;border-radius:50%;padding:3px;object-fit:contain}.banner p{overflow:hidden}
 </style>
 </head>
 <body>
@@ -211,11 +214,11 @@ function vAdm(){
 const CH={app:'App',totem:'Totem',web:'Web'};
 const side=()=>{const ids=Object.keys(S.cart);return '<h2>Seu pedido</h2>'+(ids.length?ids.map(id=>{const i=M.find(m=>m.id==id);return `<div class="row"><span>${i.n} × ${S.cart[id]}</span><span>${R(i.p*S.cart[id])}</span></div>`}).join('')+`<p><strong>Subtotal: ${R(sub())}</strong></p><button onclick="go('cart')">Ir para o pagamento</button>`:'<p>Nenhum item ainda. Escolha no cardápio.</p>')};
 const tbar=()=>`<div class="tbar"><button class="sec" onclick="S.cart={};S.start=false;render()">Cancelar</button><button onclick="go('cart')" ${qty()?'':'disabled'}>Ver pedido (${qty()}) ${qty()?R(sub()):''}</button></div>`;
-const vWelcome=()=>`<section class="welc"><h2>Bem-vindo à Raízes do Nordeste</h2><p>Toque para começar o seu pedido</p><div class="wb"><button onclick="S.start=true;go('menu')">Comer aqui</button><button onclick="S.start=true;go('menu')">Retirar no balcão</button></div><small>Sem cadastro. Não coletamos seus dados pessoais.</small></section>`;
+const vWelcome=()=>`<section class="welc"><div class="lgcard"><img src="logo.png" alt="Raízes do Nordeste"></div><h2>Bem-vindo à Raízes do Nordeste</h2><p>Toque para começar o seu pedido</p><div class="wb"><button onclick="S.start=true;go('menu')">Comer aqui</button><button onclick="S.start=true;go('menu')">Retirar no balcão</button></div><small>Sem cadastro. Não coletamos seus dados pessoais.</small></section>`;
 function render(){
  const ch=S.ch,tot=ch==='totem';
  document.body.className='ch-'+ch+(tot?' totem':'');
- $('#hd').innerHTML=`<h1>Raízes do Nordeste</h1><span class="chip">Canal: ${CH[ch]}</span><select aria-label="Unidade" onchange="if(qty())S.msg='Carrinho esvaziado: o cardápio muda de unidade para unidade.';S.cart={};S.unit=this.value;render()">${U.map(u=>`<option value="${u.id}" ${u.id===S.unit?'selected':''}>${u.n}</option>`).join('')}</select><select aria-label="Canal de atendimento" onchange="S.ch=this.value;S.start=false;S.v='menu';if(S.ch==='totem')S.user=null;render()">${Object.entries(CH).map(([k,t])=>`<option value="${k}" ${ch===k?'selected':''}>${t}</option>`).join('')}</select>`;
+ $('#hd').innerHTML=`<h1><img class="lg" src="icone.png" alt="">Raízes do Nordeste</h1><span class="chip">Canal: ${CH[ch]}</span><select aria-label="Unidade" onchange="if(qty())S.msg='Carrinho esvaziado: o cardápio muda de unidade para unidade.';S.cart={};S.unit=this.value;render()">${U.map(u=>`<option value="${u.id}" ${u.id===S.unit?'selected':''}>${u.n}</option>`).join('')}</select><select aria-label="Canal de atendimento" onchange="S.ch=this.value;S.start=false;S.v='menu';if(S.ch==='totem')S.user=null;render()">${Object.entries(CH).map(([k,t])=>`<option value="${k}" ${ch===k?'selected':''}>${t}</option>`).join('')}</select>`;
  const N=[['menu','Cardápio'],['cart','Carrinho '+qty()],['ord','Pedidos'],['pts','Pontos'],['acc',S.user?'Conta':'Entrar']];
  const cur=k=>S.v===k||(S.v==='wait'&&k==='cart')||((S.v==='priv'||S.v==='adm')&&k==='acc');
  $('#nv').innerHTML=N.map(([k,t])=>`<button ${cur(k)?'aria-current="page"':''} onclick="go('${k}')">${t}</button>`).join('');
@@ -223,7 +226,7 @@ function render(){
  if(tot&&S.start&&S.v!=='menu')c=`<p><button class="bk" onclick="go('menu')">Voltar ao cardápio</button></p>`+c;
  if(ch==='web'&&S.v==='menu')c=`<div class="wlay"><div>${c}</div><aside class="card side">${side()}</aside></div>`;
  $('#mn').innerHTML=c+(tot&&S.start&&S.v==='menu'?tbar():'');
- $('#bn').innerHTML=S.ban?`<div class="banner" role="dialog" aria-label="Aviso de privacidade"><p>Usamos só os dados essenciais para o app funcionar. Análises e campanhas dependem da sua permissão. <a href="#" onclick="S.ban=0;go('priv');return false">Ver privacidade</a></p><button onclick="S.ban=0;render()">Entendi</button></div>`:'';
+ $('#bn').innerHTML=S.ban?`<div class="banner" role="dialog" aria-label="Aviso de privacidade"><p><img class="bi" src="icone.png" alt="">Usamos só os dados essenciais para o app funcionar. Análises e campanhas dependem da sua permissão. <a href="#" onclick="S.ban=0;go('priv');return false">Ver privacidade</a></p><button onclick="S.ban=0;render()">Entendi</button></div>`:'';
 }
 document.addEventListener('click',()=>T=Date.now());
 setInterval(()=>{if(S.ch==='totem'&&S.v!=='menu'&&Date.now()-T>60000){S.cart={};S.user=null;S.start=false;S.v='menu';render()}},5000);
